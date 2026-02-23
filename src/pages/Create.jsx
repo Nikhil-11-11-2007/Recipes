@@ -2,22 +2,22 @@ import { useForm } from 'react-hook-form'
 import { nanoid } from 'nanoid'
 import { useContext } from 'react'
 import { recipecontext } from '../context/RecipeContext'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 
 const Create = () => {
-
+    const navigate = useNavigate()
     const { data, setData } = useContext(recipecontext)
 
     const { register, handleSubmit, reset } = useForm()
 
     const SubmitHandler = (recipe) => {
         recipe.id = nanoid()
-        // const copydata = [...data]
-        // copydata.push(recipe)
-        // setData(copydata)
 
         setData([...data, recipe])
-
+        toast.success("New recipe created!")
+        navigate("/recipes")
         reset()
 
     }
@@ -47,19 +47,19 @@ const Create = () => {
 
             <textarea
                 className='block border-b p-1.5 outline-0'
-                {...register("description")}
+                {...register("desc")}
                 placeholder='// start from here'
             ></textarea>
 
             <textarea
                 className='block border-b p-1.5 outline-0'
-                {...register("ingredients")}
+                {...register("ingr")}
                 placeholder='// Write ingredients seprated by comma'
             ></textarea>
 
             <textarea
                 className='block border-b p-1.5 outline-0'
-                {...register("instructions")}
+                {...register("inst")}
                 placeholder='// Write instructions seprated by comma'
             ></textarea>
 
@@ -67,9 +67,10 @@ const Create = () => {
                 className='block border-b p-1.5 outline-0'
                 {...register("category")}
             >
-                <option className='text-black' value="cat-1">Category 1</option>
-                <option className='text-black' value="cat-2">Category 2</option>
-                <option className='text-black' value="cat-3">Category 3</option>
+                <option className='text-black' value="breakfast">Breakfast</option>
+                <option className='text-black' value="lunch">Lunch</option>
+                <option className='text-black' value="supper">Supper</option>
+                <option className='text-black' value="dinner">Dinner</option>
             </select>
 
             <button className='block mt-4 bg-zinc-700 rounded px-3 py-1'>Save recipes</button>
