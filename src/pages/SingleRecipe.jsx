@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { recipecontext } from '../context/RecipeContext'
 import { useForm } from 'react-hook-form'
@@ -13,20 +13,22 @@ const SingleRecipe = () => {
     const params = useParams()
     const recipe = data.find(recipe => params.id == recipe.id)
 
-    const { register, handleSubmit, reset } = useForm({
-        defaultValues: {
-            title: recipe.title,
-            image: recipe.image,
-            desc: recipe.desc,
-            chef: recipe.chef,
-            ingr: recipe.ingr,
-            inst: recipe.inst,
-            category: recipe.category
-        }
-    })
-    
+    const { register, handleSubmit, reset } = useForm(
+        // {
+        //     defaultValues: {
+        //         title: recipe.title,
+        //         image: recipe.image,
+        //         desc: recipe.desc,
+        //         chef: recipe.chef,
+        //         ingr: recipe.ingr,
+        //         inst: recipe.inst,
+        //         category: recipe.category
+        //     }
+        // }
+    )
 
-    const SubmitHandler = (recipe) => {
+
+    const UpdateHandler = (recipe) => {
         const index = data.findIndex((recipe) => params.id == recipe.id)
         const copydata = [...data]
         copydata[index] = { ...copydata[index], ...recipe }
@@ -42,6 +44,14 @@ const SingleRecipe = () => {
         navigate("/recipes")
     }
 
+    useEffect(() => {
+        console.log("mounted");
+        return () => {
+            console.log("unmounted");
+
+        }
+    }, [])
+
     return (
         recipe ? (
             <div className='w-full flex'>
@@ -51,7 +61,7 @@ const SingleRecipe = () => {
                     <h2>{recipe.chef}</h2>
                     <p>{recipe.desc}</p>
                 </div>
-                <form className='w-1/2 p-2' onSubmit={handleSubmit(SubmitHandler)}>
+                <form className='w-1/2 p-2' onSubmit={handleSubmit(UpdateHandler)}>
                     <input
                         className="block border-b outline-0 p-1.5"
                         {...register("image")}
